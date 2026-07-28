@@ -33,8 +33,6 @@ O projeto também serve como demonstração prática de uma arquitetura preparad
 
 # 🏗️ Arquitetura da aplicação
 
-A arquitetura final planejada segue o modelo:
-
 ```
                  Usuário
 
@@ -103,6 +101,8 @@ Responsável pela interface do usuário e comunicação com a API.
 * Axum
 * Tokio
 * Serde
+* SQLx
+* dotenvy
 
 Responsável pela API REST, regras de negócio e processamento das cargas.
 
@@ -110,12 +110,10 @@ Responsável pela API REST, regras de negócio e processamento das cargas.
 
 ## Banco de dados
 
-Planejado:
-
 * PostgreSQL
-* SQLx
+* SQLx migrations
 
-O armazenamento inicialmente foi desenvolvido em memória para validação da API, sendo posteriormente migrado para banco relacional.
+Os dados de cargas são persistidos em PostgreSQL. As migrations definem a tabela `cargos` e o enum `cargo_status`.
 
 ---
 
@@ -125,7 +123,6 @@ O armazenamento inicialmente foi desenvolvido em memória para validação da AP
 cargo-truck/
 
 ├── frontend/
-│
 │   ├── src/
 │   │   ├── components/
 │   │   ├── pages/
@@ -134,12 +131,14 @@ cargo-truck/
 │   │   └── types/
 │
 ├── backend/
-│
+│   ├── migrations/
 │   ├── src/
+│   │   ├── database/
 │   │   ├── handlers/
 │   │   ├── models/
 │   │   ├── routes/
 │   │   └── main.rs
+│   └── .env
 │
 └── README.md
 ```
@@ -150,7 +149,7 @@ cargo-truck/
 
 ## Backend
 
-API REST implementada com:
+API REST implementada com persistência no PostgreSQL:
 
 ### Listar cargas
 
@@ -168,7 +167,7 @@ Retorna todas as cargas cadastradas.
 POST /cargos
 ```
 
-Recebe uma nova carga.
+Recebe uma nova carga e retorna `201 Created`.
 
 Exemplo:
 
@@ -182,6 +181,8 @@ Exemplo:
 }
 ```
 
+Status aceitos: `pending`, `in_transit` e `delivered`.
+
 ---
 
 ### Buscar carga
@@ -190,7 +191,7 @@ Exemplo:
 GET /cargos/{id}
 ```
 
-Retorna uma carga específica.
+Retorna uma carga específica ou `404 Not Found`.
 
 ---
 
@@ -200,7 +201,7 @@ Retorna uma carga específica.
 PUT /cargos/{id}
 ```
 
-Atualiza informações existentes.
+Atualiza informações existentes ou retorna `404 Not Found`.
 
 ---
 
@@ -210,18 +211,41 @@ Atualiza informações existentes.
 DELETE /cargos/{id}
 ```
 
-Remove uma carga cadastrada.
+Remove uma carga cadastrada e retorna `204 No Content`.
 
 ---
 
 # 💻 Executando localmente
 
-## Backend
+## Banco de dados
 
-Entre na pasta:
+Crie `backend/.env` com a conexão do PostgreSQL:
+
+```env
+DATABASE_URL=postgres://USUARIO:SENHA@localhost:5432/cargo_truck
+```
+
+No WSL, aplique as migrations antes de iniciar a API:
 
 ```bash
-cd backend
+cd /mnt/c/Users/andre/OneDrive/Desktop/Projetos/cargo-truck/backend
+sqlx migrate run
+```
+
+Verifique o estado com:
+
+```bash
+sqlx migrate info
+```
+
+---
+
+## Backend
+
+No WSL, entre na pasta:
+
+```bash
+cd /mnt/c/Users/andre/OneDrive/Desktop/Projetos/cargo-truck/backend
 ```
 
 Execute:
@@ -240,7 +264,7 @@ http://127.0.0.1:3000
 
 ## Frontend
 
-Entre na pasta:
+Em outro terminal, entre na pasta:
 
 ```bash
 cd frontend
@@ -264,6 +288,12 @@ Aplicação:
 http://localhost:5173
 ```
 
+O frontend usa `http://127.0.0.1:3000` como API por padrão. Para configurar outra URL, crie `frontend/.env.local`:
+
+```env
+VITE_API_URL=http://127.0.0.1:3000
+```
+
 ---
 
 # 🔄 Roadmap DevOps
@@ -277,11 +307,11 @@ http://localhost:5173
 
 ---
 
-## 🔄 Banco de dados
+## ✅ Banco de dados
 
-* [ ] PostgreSQL
-* [ ] SQLx migrations
-* [ ] Persistência definitiva
+* [x] PostgreSQL
+* [x] SQLx migrations
+* [x] Persistência definitiva
 
 ---
 
@@ -348,4 +378,6 @@ Projeto desenvolvido como aplicação prática de:
 
 # 📄 Licença
 
-Projeto experimental Bootcamp Avanti.
+Projeto desenvolvido como aplicação prática educacional no Bootcamp Avanti.
+
+Uso destinado para fins acadêmicos e de demonstração de arquitetura de software, DevOps e Cloud Native.

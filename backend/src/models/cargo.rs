@@ -1,16 +1,21 @@
 use serde::{Deserialize, Serialize};
+use sqlx::Type;
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Serialize, Deserialize, Type, Clone, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
+#[sqlx(type_name = "cargo_status")]
+#[sqlx(rename_all = "snake_case")]
 pub enum CargoStatus {
     Pending,
+
     InTransit,
+
     Delivered,
 }
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Cargo {
-    pub id: u64,
+    pub id: i64,
     pub origem: String,
     pub destino: String,
     pub peso: f64,
