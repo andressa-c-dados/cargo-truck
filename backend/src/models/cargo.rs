@@ -1,18 +1,28 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum CargoStatus {
+    Pending,
+    InTransit,
+    Delivered,
+}
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Cargo {
-
-    pub id: Option<u32>,
-
+    pub id: u64,
     pub origem: String,
-
     pub destino: String,
-
     pub peso: f64,
-
     pub volume: f64,
+    pub status: CargoStatus,
+}
 
-    pub status: String,
+#[derive(Debug, Deserialize)]
+pub struct CargoInput {
+    pub origem: String,
+    pub destino: String,
+    pub peso: f64,
+    pub volume: f64,
+    pub status: CargoStatus,
 }

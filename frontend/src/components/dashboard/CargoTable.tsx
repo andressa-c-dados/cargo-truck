@@ -1,31 +1,24 @@
-
 import { Link } from "react-router-dom";
 
-
-import type { Cargo } from "../../types/Cargo";
-
+import { cargoStatusLabel, type Cargo } from "../../types/Cargo";
 
 interface CargoTableProps {
   cargos: Cargo[];
 }
 
+export default function CargoTable({ cargos }: CargoTableProps) {
 
-export default function CargoTable({
-  cargos
-}: CargoTableProps) {
-
-
-function getStatusClass(status: string) {
+function getStatusClass(status: Cargo["status"]) {
 
   switch (status) {
 
-    case "Entregue":
+    case "delivered":
       return "bg-green-100 text-green-700";
 
-    case "Em trânsito":
+    case "in_transit":
       return "bg-blue-100 text-blue-700";
 
-    case "Pendente":
+    case "pending":
       return "bg-yellow-100 text-yellow-700";
 
     default:
@@ -125,7 +118,7 @@ function getStatusClass(status: string) {
           <span
             className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusClass(cargo.status ?? "")}`}
           >
-            {cargo.status}
+            {cargoStatusLabel[cargo.status]}
           </span>
 
         </td>

@@ -1,0 +1,189 @@
+===== src/handlers/cargo_handler.rs =====
+use axum::{
+    Json,
+    extract::Path,
+};
+
+use crate::models::cargo::Cargo;
+
+
+pub async fn listar_cargos() -> Json<Vec<Cargo>> {
+
+    let cargos = vec![
+        Cargo {
+            id: Some(1),
+            origem: "Belém".to_string(),
+            destino: "São Paulo".to_string(),
+            peso: 1000.0,
+            volume: 20.0,
+            status: "Em trânsito".to_string(),
+        },
+
+        Cargo {
+            id: Some(2),
+            origem: "Manaus".to_string(),
+            destino: "Brasília".to_string(),
+            peso: 500.0,
+            volume: 10.0,
+            status: "Entregue".to_string(),
+        },
+    ];
+
+    Json(cargos)
+}
+
+
+
+pub async fn buscar_cargo(
+    Path(id): Path<u32>
+) -> Json<Cargo> {
+
+    let cargo = Cargo {
+
+        id: Some(id),
+
+        origem: "Belém".to_string(),
+
+        destino: "São Paulo".to_string(),
+
+        peso: 1000.0,
+
+        volume: 20.0,
+
+        status: "Em trânsito".to_string(),
+
+    };
+
+    Json(cargo)
+}
+
+
+
+pub async fn criar_cargo(
+    Json(cargo): Json<Cargo>
+) -> Json<Cargo> {
+
+    println!(
+        "Nova carga recebida: {} -> {}",
+        cargo.origem,
+        cargo.destino
+    );
+
+    Json(cargo)
+}
+pub async fn atualizar_cargo(
+    Path(id): Path<u32>,
+    Json(mut cargo): Json<Cargo>,
+) -> Json<Cargo> {
+
+    cargo.id = Some(id);
+
+    println!(
+        "Carga atualizada: {} -> {}",
+        cargo.origem,
+        cargo.destino
+    );
+
+    Json(cargo)
+}
+pub async fn deletar_cargo(
+    Path(id): Path<u32>,
+) -> Json<String> {
+
+    println!(
+        "Carga removida: {}",
+        id
+    );
+
+    Json(
+        format!("Carga {} removida com sucesso", id)
+    )
+}===== src/handlers/mod.rs =====
+pub mod cargo_handler;===== src/main.rs =====
+mod models;
+mod handlers;
+mod routes;
+
+use tower_http::cors::CorsLayer;
+
+use axum::{
+    routing::get,
+    Router,
+};
+
+use routes::cargo_routes::cargo_routes;
+
+
+#[tokio::main]
+async fn main() {
+
+    let cors = CorsLayer::permissive();
+
+let app = Router::new()
+    .route("/", get(home))
+    .merge(cargo_routes())
+    .layer(cors);
+
+    let listener = tokio::net::TcpListener::bind(
+        "127.0.0.1:3000"
+    )
+    .await
+    .unwrap();
+
+
+    println!("Servidor rodando na porta 3000");
+
+
+    axum::serve(listener, app)
+        .await
+        .unwrap();
+}
+
+
+async fn home() -> &'static str {
+    "Cargo Truck API 🚛"
+}===== src/models/cargo.rs =====
+use serde::{Serialize, Deserialize};
+
+
+#[derive(Serialize, Deserialize)]
+pub struct Cargo {
+
+    pub id: Option<u32>,
+
+    pub origem: String,
+
+    pub destino: String,
+
+    pub peso: f64,
+
+    pub volume: f64,
+
+    pub status: String,
+}===== src/models/mod.rs =====
+pub mod cargo;===== src/routes/cargo_routes.rs =====
+use axum::{
+    routing::{get, post},
+    Router,
+};
+
+use crate::handlers::cargo_handler::{
+    listar_cargos,
+    buscar_cargo,
+    criar_cargo,
+    atualizar_cargo,
+    deletar_cargo,
+};
+
+pub fn cargo_routes() -> Router {
+
+    Router::new()
+    .route("/cargos", get(listar_cargos).post(criar_cargo))
+    .route(
+    "/cargos/{id}",
+    get(buscar_cargo)
+        .put(atualizar_cargo)
+        .delete(deletar_cargo)
+)
+}===== src/routes/mod.rs =====
+pub mod cargo_routes;

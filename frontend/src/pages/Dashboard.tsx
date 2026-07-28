@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
+
 import SummaryCard from "../components/dashboard/SummaryCard";
 import CargoTable from "../components/dashboard/CargoTable";
-import { useEffect, useState } from "react";
+
 import { getCargos } from "../services/cargoService";
 import type { Cargo } from "../types/Cargo";
 
@@ -9,17 +11,24 @@ export default function Dashboard() {
 
 
   const [cargos, setCargos] = useState<Cargo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
 
 
   useEffect(() => {
 
     async function carregarCargos() {
-
-      const dados = await getCargos();
-
-      setCargos(dados);
-
+      try {
+        setError(null);
+        setCargos(await getCargos());
+      } catch {
+        setError("Não foi possível carregar as cargas. Verifique se a API está em execução.");
+      } finally {
+        setLoading(false);
+      }
     }
+
 
     carregarCargos();
 
@@ -30,13 +39,15 @@ export default function Dashboard() {
   const totalCargas = cargos.length;
 
 
+
   const emTransito = cargos.filter(
-    (cargo) => cargo.status === "Em trânsito"
+    (cargo) => cargo.status === "in_transit"
   ).length;
 
 
+
   const entregues = cargos.filter(
-    (cargo) => cargo.status === "Entregue"
+    (cargo) => cargo.status === "delivered"
   ).length;
 
 
@@ -49,8 +60,12 @@ export default function Dashboard() {
         Dashboard
       </h1>
 
+      {error && <p className="mb-4 rounded bg-red-100 p-3 text-red-700">{error}</p>}
+
+
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
 
         <SummaryCard
           title="Total de cargas"
@@ -69,10 +84,13 @@ export default function Dashboard() {
           value={entregues}
         />
 
+
       </div>
 
 
-      <CargoTable cargos={cargos} />
+
+      {loading ? <p className="mt-8">Carregando cargas...</p> : <CargoTable cargos={cargos} />}
+
 
     </div>
 
