@@ -2,17 +2,14 @@ mod database;
 mod handlers;
 mod models;
 mod routes;
-
 use dotenvy::dotenv;
-use std::env;
+use database::connection::connect;
 
 use axum::{
     Router,
     http::{HeaderValue, Method, header},
     routing::get,
 };
-
-use sqlx::postgres::PgPoolOptions;
 
 use tower_http::cors::CorsLayer;
 
@@ -22,13 +19,8 @@ use routes::cargo_routes::cargo_routes;
 async fn main() {
     dotenv().ok();
 
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL não encontrada");
 
-    let pool = PgPoolOptions::new()
-        .max_connections(5)
-        .connect(&database_url)
-        .await
-        .expect("Erro ao conectar no banco");
+    let pool = connect().await;
 
     let cors = CorsLayer::new()
         .allow_origin("http://localhost:5173".parse::<HeaderValue>().unwrap())
