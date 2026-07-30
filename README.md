@@ -25,7 +25,7 @@ Construir uma solução logística onde usuários possam:
 * Consultar detalhes;
 * Atualizar informações;
 * Remover cargas;
-* Acompanhar status de transporte.
+* Acompanhar o status do transporte.
 
 O projeto também serve como demonstração prática de uma arquitetura preparada para ambientes de produção.
 
@@ -33,49 +33,54 @@ O projeto também serve como demonstração prática de uma arquitetura preparad
 
 # 🏗️ Arquitetura da aplicação
 
-```
+```text
                  Usuário
 
-                    |
-                    v
+                    │
+                    ▼
 
-              Frontend React
+             Frontend (React)
 
-                    |
-                    v
+                    │
+                    ▼
 
-              API Rust Axum
+            API REST (Rust + Axum)
 
-                    |
-                    v
+                    │
+                    ▼
 
-             PostgreSQL Database
+          PostgreSQL Database
 ```
 
-Com infraestrutura DevOps:
+Arquitetura DevOps:
 
-```
-              GitHub Repository
+```text
+            GitHub Repository
 
-                    |
+                    │
+                    ▼
 
-              GitHub Actions
+            GitHub Actions
 
-                    |
+                    │
+                    ▼
 
              Docker Images
 
-                    |
+                    │
+                    ▼
 
-              Deploy automático
+           Deploy Automatizado
 
-                    |
+                    │
+                    ▼
 
         Terraform + Ansible
 
-                    |
+                    │
+                    ▼
 
-             Ambiente Cloud
+            Ambiente Cloud
 ```
 
 ---
@@ -111,15 +116,15 @@ Responsável pela API REST, regras de negócio e processamento das cargas.
 ## Banco de dados
 
 * PostgreSQL
-* SQLx migrations
+* SQLx Migrations
 
-Os dados de cargas são persistidos em PostgreSQL. As migrations definem a tabela `cargos` e o enum `cargo_status`.
+Os dados das cargas são persistidos no PostgreSQL. As migrations são responsáveis por versionar o banco de dados e manter sua estrutura consistente entre diferentes ambientes.
 
 ---
 
 # 📂 Estrutura do projeto
 
-```
+```text
 cargo-truck/
 
 ├── frontend/
@@ -138,7 +143,13 @@ cargo-truck/
 │   │   ├── models/
 │   │   ├── routes/
 │   │   └── main.rs
-│   └── .env
+│   └── .env.example
+│
+├── docker/
+├── terraform/
+├── ansible/
+├── .github/
+│   └── workflows/
 │
 └── README.md
 ```
@@ -149,11 +160,11 @@ cargo-truck/
 
 ## Backend
 
-API REST implementada com persistência no PostgreSQL:
+API REST com persistência em PostgreSQL.
 
 ### Listar cargas
 
-```
+```http
 GET /cargos
 ```
 
@@ -163,11 +174,9 @@ Retorna todas as cargas cadastradas.
 
 ### Criar carga
 
-```
+```http
 POST /cargos
 ```
-
-Recebe uma nova carga e retorna `201 Created`.
 
 Exemplo:
 
@@ -181,58 +190,78 @@ Exemplo:
 }
 ```
 
-Status aceitos: `pending`, `in_transit` e `delivered`.
+Status disponíveis:
+
+* `pending`
+* `in_transit`
+* `delivered`
 
 ---
 
 ### Buscar carga
 
-```
+```http
 GET /cargos/{id}
 ```
-
-Retorna uma carga específica ou `404 Not Found`.
 
 ---
 
 ### Atualizar carga
 
-```
+```http
 PUT /cargos/{id}
 ```
-
-Atualiza informações existentes ou retorna `404 Not Found`.
 
 ---
 
 ### Remover carga
 
-```
+```http
 DELETE /cargos/{id}
 ```
 
-Remove uma carga cadastrada e retorna `204 No Content`.
+---
+
+# 📋 Pré-requisitos
+
+Antes de executar o projeto, certifique-se de possuir:
+
+* Git
+* Node.js (22 ou superior)
+* npm
+* Rust (Cargo)
+* PostgreSQL
+* SQLx CLI
 
 ---
 
-# 💻 Executando localmente
+# 💻 Executando o projeto
 
-## Banco de dados
-
-Crie `backend/.env` com a conexão do PostgreSQL:
-
-```env
-DATABASE_URL=postgres://USUARIO:SENHA@localhost:5432/cargo_truck
-```
-
-No WSL, aplique as migrations antes de iniciar a API:
+## 1. Clone o repositório
 
 ```bash
-cd /mnt/c/Users/andre/OneDrive/Desktop/Projetos/cargo-truck/backend
+git clone <URL_DO_REPOSITORIO>
+cd cargo-truck
+```
+
+---
+
+## 2. Configurando o banco
+
+Crie um arquivo `.env` dentro da pasta `backend`.
+
+```env
+DATABASE_URL=postgres://usuario:senha@localhost:5432/cargo_truck
+```
+
+Execute as migrations:
+
+```bash
+cd backend
 sqlx migrate run
 ```
 
-Verifique o estado com:
+Para verificar o status das migrations:
 
 ```bash
 sqlx migrate info
@@ -240,21 +269,27 @@ sqlx migrate info
 
 ---
 
-## Backend
+## 3. Executando o Backend
 
-No WSL, entre na pasta:
+Entre na pasta:
 
 ```bash
-cd /mnt/c/Users/andre/OneDrive/Desktop/Projetos/cargo-truck/backend
+cd backend
 ```
 
-Execute:
+Compile o projeto:
+
+```bash
+cargo build
+```
+
+Execute a aplicação:
 
 ```bash
 cargo run
 ```
 
-Servidor:
+API disponível em:
 
 ```
 http://127.0.0.1:3000
@@ -262,15 +297,15 @@ http://127.0.0.1:3000
 
 ---
 
-## Frontend
+## 4. Executando o Frontend
 
-Em outro terminal, entre na pasta:
+Em outro terminal:
 
 ```bash
 cd frontend
 ```
 
-Instale dependências:
+Instale as dependências:
 
 ```bash
 npm install
@@ -282,13 +317,13 @@ Execute:
 npm run dev
 ```
 
-Aplicação:
+Aplicação disponível em:
 
 ```
 http://localhost:5173
 ```
 
-O frontend usa `http://127.0.0.1:3000` como API por padrão. Para configurar outra URL, crie `frontend/.env.local`:
+Caso a API esteja em outro endereço, crie um arquivo `.env.local`:
 
 ```env
 VITE_API_URL=http://127.0.0.1:3000
@@ -298,27 +333,28 @@ VITE_API_URL=http://127.0.0.1:3000
 
 # 🔄 Roadmap DevOps
 
-## ✅ Desenvolvimento da aplicação
+## ✅ Aplicação
 
 * [x] Frontend React
-* [x] API REST Rust
+* [x] Backend Rust
+* [x] API REST
 * [x] CRUD de cargas
-* [x] Comunicação Frontend + Backend
+* [x] Integração Frontend + Backend
 
 ---
 
-## ✅ Banco de dados
+## ✅ Banco de Dados
 
 * [x] PostgreSQL
-* [x] SQLx migrations
-* [x] Persistência definitiva
+* [x] SQLx Migrations
+* [x] Persistência dos dados
 
 ---
 
 ## 🐳 Containerização
 
-* [ ] Dockerfile Frontend
-* [ ] Dockerfile Backend
+* [ ] Dockerfile (Frontend)
+* [ ] Dockerfile (Backend)
 * [ ] Docker Compose
 * [ ] Containers integrados
 
@@ -326,58 +362,55 @@ VITE_API_URL=http://127.0.0.1:3000
 
 ## ⚙️ CI/CD
 
-Implementação planejada:
-
 * [ ] GitHub Actions
-* [ ] Testes automáticos
+* [ ] Testes automatizados
 * [ ] Build automático
 * [ ] Publicação de imagens Docker
-* [ ] Deploy automático
+* [ ] Deploy automatizado
 
 ---
 
-## 🏗️ Infraestrutura como código
+## 🏗️ Infraestrutura como Código
 
-Com Terraform:
-
-* [ ] Provisionamento de servidores
+* [ ] Terraform
+* [ ] Provisionamento da infraestrutura
 * [ ] Configuração de rede
-* [ ] Recursos de cloud
+* [ ] Recursos em nuvem
 
 ---
 
 ## 🤖 Automação
 
-Com Ansible:
-
-* [ ] Instalação automática de dependências
-* [ ] Configuração de servidores
+* [ ] Ansible
+* [ ] Configuração automática de servidores
+* [ ] Instalação de dependências
 * [ ] Deploy automatizado
 
 ---
 
 # 📊 Visão DevOps
 
-O Cargo Truck busca aplicar os princípios:
+Este projeto busca aplicar princípios modernos de DevOps, como:
 
-* Automação;
-* Entrega contínua;
-* Infraestrutura reproduzível;
-* Monitoramento;
-* Padronização de ambientes.
+* Automação de processos;
+* Integração Contínua (CI);
+* Entrega Contínua (CD);
+* Infraestrutura como Código (IaC);
+* Padronização de ambientes;
+* Escalabilidade;
+* Reprodutibilidade;
+* Preparação para ambientes de produção.
 
-O objetivo não é apenas criar uma aplicação funcional, mas demonstrar todo o ciclo de vida de um software moderno.
+Mais do que uma aplicação logística, o Cargo Truck é um laboratório prático para demonstrar o ciclo completo de desenvolvimento, entrega e operação de software em ambientes Cloud Native.
 
 ---
 
 # 👨‍💻 Equipe
 
-Projeto desenvolvido como aplicação prática de:
+Projeto desenvolvido para fins acadêmicos como prática de Arquitetura de Software, Cloud Computing e DevOps.
 
 ---
 
 # 📄 Licença
 
-Projeto desenvolvido como aplicação prática educacional no Bootcamp Avanti.
-
-Uso destinado para fins acadêmicos e de demonstração de arquitetura de software, DevOps e Cloud Native.
+Projeto desenvolvido para fins educacionais e de demonstração de práticas modernas de Engenharia de Software, DevOps e Cloud Native.
