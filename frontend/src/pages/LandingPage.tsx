@@ -20,6 +20,7 @@ export default function LandingPage() {
       <section className="hero-section">
         <div className="app-container hero-container">
           <div className="hero-content">
+            <img src="/images/logo.png" alt="Cargo Truck Oficial" style={{ width: '160px', borderRadius: '16px', marginBottom: '2rem', boxShadow: '0 10px 25px rgba(0,0,0,0.15)' }} />
             <h1 className="hero-title">
               O controle de frotas e cargas
               <br /> na palma da mão

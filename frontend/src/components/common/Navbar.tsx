@@ -6,8 +6,9 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-content">
-        <Link to="/" className="navbar-brand" style={{ textDecoration: 'none' }}>
-          <img src="/images/logo.png" alt="Cargo Truck Logo" style={{ height: '40px', objectFit: 'contain', borderRadius: '8px' }} />
+        <Link to="/" className="navbar-brand" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <img src="/images/logo.png" alt="Cargo Truck Logo" style={{ height: '40px', width: '40px', objectFit: 'cover', borderRadius: '8px' }} />
+          <span style={{ fontSize: '1.25rem', fontWeight: 700, color: '#ffffff' }}>Cargo Truck</span>
         </Link>
 
         <div className="navbar-links">
