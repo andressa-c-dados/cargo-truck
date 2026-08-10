@@ -7,7 +7,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar-content">
         <Link to="/" className="navbar-brand" style={{ textDecoration: 'none' }}>
-          <img src="/images/logo.png" alt="Cargo Truck Logo" style={{ height: '40px', objectFit: 'contain' }} />
+          <img src="/images/logo.png" alt="Cargo Truck Logo" style={{ height: '40px', objectFit: 'contain', borderRadius: '8px' }} />
         </Link>
 
         <div className="navbar-links">
