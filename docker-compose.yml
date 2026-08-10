@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:15-alpine
+    container_name: cargo-truck-db
+    environment:
+      POSTGRES_USER: cargo_user
+      POSTGRES_PASSWORD: cargo_password
+      POSTGRES_DB: cargo_truck
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cargo-truck-backend
+    environment:
+      DATABASE_URL: postgres://cargo_user:cargo_password@database:5432/cargo_truck
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cargo-truck-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
