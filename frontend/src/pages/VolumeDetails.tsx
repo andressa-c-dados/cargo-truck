@@ -62,23 +62,20 @@ export default function VolumeDetails() {
 
   if (loading) {
     return (
-      <div>
-        <p>Carregando...</p>
+      <div className="app-container">
+        <p className="text-muted">Carregando...</p>
       </div>
     );
   }
 
   if (error || !cargo) {
     return (
-      <div>
-        <h1 className="text-2xl font-bold">
+      <div className="app-container">
+        <h1 className="page-title" style={{ color: 'var(--danger)' }}>
           {error ?? "Carga não encontrada"}
         </h1>
 
-        <Link
-          to="/"
-          className="inline-block mt-4 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 transition"
-        >
+        <Link to="/" className="btn-secondary" style={{ display: 'inline-block', textDecoration: 'none', marginTop: '1rem' }}>
           ← Voltar
         </Link>
       </div>
@@ -86,44 +83,46 @@ export default function VolumeDetails() {
   }
 
   return (
-    <div>
-      <Link
-        to="/"
-        className="inline-block mb-6 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 transition"
-      >
+    <div className="app-container">
+      <Link to="/" className="btn-secondary" style={{ display: 'inline-block', textDecoration: 'none', marginBottom: '2rem' }}>
         ← Voltar
       </Link>
 
-      <h1 className="text-3xl font-bold mb-6">Detalhes da Carga</h1>
+      <h1 className="page-title">Detalhes da Carga</h1>
 
-      <div className="bg-white p-6 rounded-lg shadow max-w-xl">
-        <p className="mb-2">
-          <strong>ID:</strong> {cargo.id}
+      <div className="form-container" style={{ padding: '2rem' }}>
+        <p className="form-group" style={{ marginBottom: '1rem' }}>
+          <strong style={{ color: 'var(--text-muted)' }}>ID:</strong> <span style={{ fontSize: '1.1rem', fontWeight: '600' }}>{cargo.id}</span>
         </p>
 
-        <p className="mb-2">
-          <strong>Origem:</strong> {cargo.origem}
+        <p className="form-group" style={{ marginBottom: '1rem' }}>
+          <strong style={{ color: 'var(--text-muted)' }}>Origem:</strong> <span style={{ fontSize: '1.1rem', fontWeight: '500' }}>{cargo.origem}</span>
         </p>
 
-        <p className="mb-2">
-          <strong>Destino:</strong> {cargo.destino}
+        <p className="form-group" style={{ marginBottom: '1rem' }}>
+          <strong style={{ color: 'var(--text-muted)' }}>Destino:</strong> <span style={{ fontSize: '1.1rem', fontWeight: '500' }}>{cargo.destino}</span>
         </p>
 
-        <p className="mb-2">
-          <strong>Peso:</strong> {cargo.peso} kg
+        <p className="form-group" style={{ marginBottom: '1rem' }}>
+          <strong style={{ color: 'var(--text-muted)' }}>Peso:</strong> <span style={{ fontSize: '1.1rem', fontWeight: '500' }}>{cargo.peso} kg</span>
         </p>
 
-        <p className="mb-2">
-          <strong>Volume:</strong> {cargo.volume} m³
+        <p className="form-group" style={{ marginBottom: '1rem' }}>
+          <strong style={{ color: 'var(--text-muted)' }}>Volume:</strong> <span style={{ fontSize: '1.1rem', fontWeight: '500' }}>{cargo.volume} m³</span>
         </p>
 
-        <p className="mb-2">
-          <strong>Status:</strong> {cargoStatusLabel[cargo.status]}
+        <p className="form-group" style={{ marginBottom: '1rem' }}>
+          <strong style={{ color: 'var(--text-muted)' }}>Status:</strong> 
+          <span style={{ marginLeft: '0.5rem', fontWeight: '600', color: 'var(--brand-orange)' }}>
+            {cargoStatusLabel[cargo.status]}
+          </span>
         </p>
 
-        <div className="mt-6 flex gap-3">
-          <Link to={`/cargo/${cargo.id}/edit`} className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 transition">Editar</Link>
-          <button onClick={handleDelete} disabled={deleting} className="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-800 transition disabled:opacity-50">{deleting ? "Removendo..." : "Excluir"}</button>
+        <div className="btn-group" style={{ marginTop: '2rem' }}>
+          <Link to={`/cargo/${cargo.id}/edit`} className="btn-primary" style={{ textDecoration: 'none' }}>Editar</Link>
+          <button onClick={handleDelete} disabled={deleting} className="btn-secondary" style={{ color: 'var(--danger)', borderColor: 'var(--danger)' }}>
+            {deleting ? "Removendo..." : "Excluir"}
+          </button>
         </div>
       </div>
     </div>

@@ -9,132 +9,55 @@ interface CargoTableProps {
 export default function CargoTable({ cargos }: CargoTableProps) {
 
 function getStatusClass(status: Cargo["status"]) {
-
   switch (status) {
-
-    case "delivered":
-      return "bg-green-100 text-green-700";
-
-    case "in_transit":
-      return "bg-blue-100 text-blue-700";
-
-    case "pending":
-      return "bg-yellow-100 text-yellow-700";
-
-    default:
-      return "bg-gray-100 text-gray-700";
+    case "delivered": return "badge badge-delivered";
+    case "in_transit": return "badge badge-intransit";
+    case "pending": return "badge badge-pending";
+    default: return "badge badge-default";
   }
-
 }
 
   return (
-    <div className="bg-white rounded-lg shadow mt-8">
-
-
-      <div className="p-5">
-
-        <h2 className="text-xl font-bold">
-          Últimas cargas
-        </h2>
-
+    <div className="table-container mt-8">
+      <div className="table-header-title">
+        Últimas cargas
       </div>
-
-
-
-      <table className="w-full">
-
-
-        <thead className="bg-gray-100">
-
+      <table className="custom-table">
+        <thead>
           <tr>
-
-            <th className="p-3 text-left">
-              ID
-            </th>
-
-            <th className="p-3 text-left">
-              Origem
-            </th>
-
-            <th className="p-3 text-left">
-              Destino
-            </th>
-
-            <th className="p-3 text-left">
-              Status
-            </th>
-
+            <th>ID</th>
+            <th>Origem</th>
+            <th>Destino</th>
+            <th>Status</th>
           </tr>
-
         </thead>
-
-
-
         <tbody>
-
-  {cargos.length === 0 ? (
-
-    <tr>
-
-      <td
-        colSpan={4}
-        className="text-center p-8 text-gray-500"
-      >
-        Nenhuma carga cadastrada.
-      </td>
-
-    </tr>
-
-  ) : (
-
-    cargos.map((cargo) => (
-
-      <tr
-        key={cargo.id}
-        className="border-t hover:bg-gray-50"
-      >
-
-        <td className="p-3">
-
-          <Link
-            to={`/volume/${cargo.id}`}
-            className="text-blue-600 hover:underline"
-          >
-            {cargo.id}
-          </Link>
-
-        </td>
-
-        <td className="p-3">
-          {cargo.origem}
-        </td>
-
-        <td className="p-3">
-          {cargo.destino}
-        </td>
-
-        <td className="p-3">
-
-          <span
-            className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusClass(cargo.status ?? "")}`}
-          >
-            {cargoStatusLabel[cargo.status]}
-          </span>
-
-        </td>
-
-      </tr>
-
-    ))
-
-  )}
-
-</tbody>
-
-
+          {cargos.length === 0 ? (
+            <tr>
+              <td colSpan={4} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
+                Nenhuma carga cadastrada.
+              </td>
+            </tr>
+          ) : (
+            cargos.map((cargo) => (
+              <tr key={cargo.id}>
+                <td>
+                  <Link to={`/volume/${cargo.id}`} className="table-link">
+                    {cargo.id}
+                  </Link>
+                </td>
+                <td>{cargo.origem}</td>
+                <td>{cargo.destino}</td>
+                <td>
+                  <span className={getStatusClass(cargo.status ?? "")}>
+                    {cargoStatusLabel[cargo.status]}
+                  </span>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
       </table>
-
-
     </div>
   );
 }

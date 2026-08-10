@@ -8,16 +8,13 @@ export default function SummaryCard({
   value,
 }: SummaryCardProps) {
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-
-      <h3 className="text-gray-500 text-sm">
+    <div className="summary-card">
+      <h3 className="card-title">
         {title}
       </h3>
-
-      <p className="text-3xl font-bold mt-2">
+      <p className="card-value">
         {value}
       </p>
-
     </div>
   );
 }

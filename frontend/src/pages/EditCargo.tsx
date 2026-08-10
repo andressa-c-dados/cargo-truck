@@ -43,16 +43,46 @@ export default function EditCargo() {
   if (!cargo) return <p>Carregando carga...</p>;
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">Editar carga</h1>
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow max-w-xl space-y-4">
-        {error && <p className="rounded bg-red-100 p-3 text-red-700">{error}</p>}
-        <label className="block">Origem<input required className="w-full border p-2 rounded mt-1" value={cargo.origem} onChange={(e) => setCargo({ ...cargo, origem: e.target.value })} /></label>
-        <label className="block">Destino<input required className="w-full border p-2 rounded mt-1" value={cargo.destino} onChange={(e) => setCargo({ ...cargo, destino: e.target.value })} /></label>
-        <label className="block">Peso (kg)<input required min="0.01" step="0.01" type="number" className="w-full border p-2 rounded mt-1" value={cargo.peso} onChange={(e) => setCargo({ ...cargo, peso: Number(e.target.value) })} /></label>
-        <label className="block">Volume (m³)<input required min="0.01" step="0.01" type="number" className="w-full border p-2 rounded mt-1" value={cargo.volume} onChange={(e) => setCargo({ ...cargo, volume: Number(e.target.value) })} /></label>
-        <label className="block">Status<select className="w-full border p-2 rounded mt-1" value={cargo.status} onChange={(e) => setCargo({ ...cargo, status: e.target.value as CargoInput["status"] })}><option value="pending">Pendente</option><option value="in_transit">Em trânsito</option><option value="delivered">Entregue</option></select></label>
-        <div className="flex gap-3"><button disabled={saving} className="bg-slate-900 text-white px-5 py-2 rounded disabled:opacity-50">{saving ? "Salvando..." : "Salvar alterações"}</button><Link to={`/volume/${numericId}`} className="px-5 py-2 rounded border">Cancelar</Link></div>
+    <div className="app-container">
+      <h1 className="page-title">Editar carga</h1>
+      <form onSubmit={handleSubmit} className="form-container">
+        {error && <p className="mb-4 rounded bg-red-900 p-3 text-red-100 border border-red-500">{error}</p>}
+        
+        <div className="form-group">
+          <label className="form-label">Origem</label>
+          <input required className="form-input" value={cargo.origem} onChange={(e) => setCargo({ ...cargo, origem: e.target.value })} />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Destino</label>
+          <input required className="form-input" value={cargo.destino} onChange={(e) => setCargo({ ...cargo, destino: e.target.value })} />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Peso (kg)</label>
+          <input required min="0.01" step="0.01" type="number" className="form-input" value={cargo.peso} onChange={(e) => setCargo({ ...cargo, peso: Number(e.target.value) })} />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Volume (m³)</label>
+          <input required min="0.01" step="0.01" type="number" className="form-input" value={cargo.volume} onChange={(e) => setCargo({ ...cargo, volume: Number(e.target.value) })} />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Status</label>
+          <select className="form-select" value={cargo.status} onChange={(e) => setCargo({ ...cargo, status: e.target.value as CargoInput["status"] })}>
+            <option value="pending">Pendente</option>
+            <option value="in_transit">Em trânsito</option>
+            <option value="delivered">Entregue</option>
+          </select>
+        </div>
+
+        <div className="btn-group">
+          <button disabled={saving} className="btn-primary" style={{ opacity: saving ? 0.5 : 1 }}>
+            {saving ? "Salvando..." : "Salvar alterações"}
+          </button>
+          <Link to={`/volume/${numericId}`} className="btn-secondary" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>Cancelar</Link>
+        </div>
       </form>
     </div>
   );
