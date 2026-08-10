@@ -35,6 +35,65 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Background Glowing Orbs */
+body::before {
+  content: "";
+  position: fixed;
+  top: -150px;
+  right: -150px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(232, 29, 98, 0.15) 0%, rgba(232, 29, 98, 0) 70%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  bottom: -200px;
+  left: -100px;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(0, 194, 209, 0.1) 0%, rgba(0, 194, 209, 0) 70%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* Dotted Pattern Decorators (Chevron Style) */
+.app-container::before {
+  content: "";
+  position: fixed;
+  top: 50px;
+  right: -50px;
+  width: 300px;
+  height: 300px;
+  /* SVG Square Dot Grid */
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='4' height='4' fill='%23e81d62' fill-opacity='0.4'/%3E%3C/svg%3E");
+  transform: rotate(45deg);
+  z-index: -1;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+}
+
+.app-container::after {
+  content: "";
+  position: fixed;
+  bottom: 0px;
+  left: -50px;
+  width: 250px;
+  height: 250px;
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='4' height='4' fill='%2300c2d1' fill-opacity='0.3'/%3E%3C/svg%3E");
+  transform: rotate(-45deg);
+  z-index: -1;
+  pointer-events: none;
+  mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
+  -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
 }
 
 /* Layout */
@@ -42,6 +101,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2.5rem 2rem;
+  position: relative;
 }
 
 /* Navbar */
