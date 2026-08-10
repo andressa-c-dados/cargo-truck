@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import LandingPage from "../pages/LandingPage";
 import Dashboard from "../pages/Dashboard";
 import VolumeDetails from "../pages/VolumeDetails";
 import CreateCargo from "../pages/CreateCargo";
@@ -16,12 +17,13 @@ export default function AppRoutes() {
 
       <Routes>
 
+        <Route path="/" element={<LandingPage />} />
 
         <Route element={<Layout />}>
 
 
           <Route 
-            path="/" 
+            path="/dashboard" 
             element={<Dashboard />} 
           />
 

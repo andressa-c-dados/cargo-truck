@@ -6,15 +6,15 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-content">
-        <div className="navbar-brand">
+        <Link to="/" className="navbar-brand" style={{ textDecoration: 'none' }}>
           <FaTruck size={28} />
           <span>Cargo Truck</span>
-        </div>
+        </Link>
 
         <div className="navbar-links">
-          <Link to="/" className="nav-link">
+          <Link to="/dashboard" className="nav-link">
             <MdDashboard size={20} />
-            Dashboard
+            Painel Administrativo
           </Link>
           <Link to="/cargo/create" className="nav-link">
             <FaPlusCircle size={20} />
