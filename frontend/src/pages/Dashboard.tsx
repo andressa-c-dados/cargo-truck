@@ -35,7 +35,7 @@ export default function Dashboard() {
         Dashboard
       </h1>
 
-      {error && <p className="mb-4 rounded p-3" style={{ background: 'rgba(232, 29, 98, 0.2)', color: '#ffb3c6', border: '1px solid var(--brand-primary)' }}>{error}</p>}
+      {error && <p className="mb-4 rounded bg-red-900 p-3 text-red-100 border border-red-500">{error}</p>}
 
       <div className="cards-grid">
         <SummaryCard

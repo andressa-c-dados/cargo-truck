@@ -71,7 +71,7 @@ export default function VolumeDetails() {
   if (error || !cargo) {
     return (
       <div className="app-container">
-        <h1 className="page-title" style={{ color: 'var(--brand-primary)' }}>
+        <h1 className="page-title" style={{ color: 'var(--danger)' }}>
           {error ?? "Carga não encontrada"}
         </h1>
 
@@ -120,7 +120,7 @@ export default function VolumeDetails() {
 
         <div className="btn-group" style={{ marginTop: '2rem' }}>
           <Link to={`/cargo/${cargo.id}/edit`} className="btn-primary" style={{ textDecoration: 'none' }}>Editar</Link>
-          <button onClick={handleDelete} disabled={deleting} className="btn-secondary" style={{ color: 'var(--brand-primary)', borderColor: 'var(--brand-primary)' }}>
+          <button onClick={handleDelete} disabled={deleting} className="btn-secondary" style={{ color: 'var(--danger)', borderColor: 'var(--danger)' }}>
             {deleting ? "Removendo..." : "Excluir"}
           </button>
         </div>
