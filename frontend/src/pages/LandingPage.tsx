@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Navbar from "../components/common/Navbar";
 
 export default function LandingPage() {
   const [trackingId, setTrackingId] = useState("");
@@ -8,13 +9,13 @@ export default function LandingPage() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (trackingId.trim()) {
-      // Redireciona para a página de detalhes do volume com o ID inserido
       navigate(`/volume/${trackingId.trim()}`);
     }
   };
 
   return (
     <div className="landing-page">
+      <Navbar />
       {/* Hero Section */}
       <section className="hero-section">
         <div className="app-container hero-container">
@@ -80,7 +81,7 @@ export default function LandingPage() {
               <div className="article-content">
                 <h4>Tudo sobre Otimização de Rotas: Como reduzir custos</h4>
                 <p>Entenda as novas regras e confira orientações para resolver tudo pelo aplicativo e aproveitar a economia.</p>
-                <Link to="#">Acessar</Link>
+                <Link to="/blog/otimizacao-rotas">Acessar</Link>
               </div>
             </div>
             
@@ -89,7 +90,7 @@ export default function LandingPage() {
               <div className="article-content">
                 <h4>Mitos e verdades sobre rastreamento em tempo real</h4>
                 <p>O que realmente muda quando você monitora e como superar receios na hora de reorganizar sua frota.</p>
-                <Link to="#">Acessar</Link>
+                <Link to="/blog/rastreamento">Acessar</Link>
               </div>
             </div>
 
@@ -98,7 +99,7 @@ export default function LandingPage() {
               <div className="article-content">
                 <h4>Quando os prazos não fecham, por onde começar a organizar?</h4>
                 <p>Identificar prioridades e rever hábitos podem devolver o controle e a tranquilidade e evitar consequências.</p>
-                <Link to="#">Acessar</Link>
+                <Link to="/blog/prazos-logistica">Acessar</Link>
               </div>
             </div>
           </div>

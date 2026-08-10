@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LandingPage from "../pages/LandingPage";
+import ArticlePage from "../pages/ArticlePage";
 import Dashboard from "../pages/Dashboard";
 import VolumeDetails from "../pages/VolumeDetails";
 import CreateCargo from "../pages/CreateCargo";
@@ -8,16 +9,12 @@ import EditCargo from "../pages/EditCargo";
 
 import Layout from "../components/common/Layout";
 
-
 export default function AppRoutes() {
-
   return (
-
     <BrowserRouter>
-
       <Routes>
-
         <Route path="/" element={<LandingPage />} />
+        <Route path="/blog/:slug" element={<ArticlePage />} />
 
         <Route element={<Layout />}>
 
