@@ -1,6 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function LandingPage() {
+  const [trackingId, setTrackingId] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (trackingId.trim()) {
+      // Redireciona para a página de detalhes do volume com o ID inserido
+      navigate(`/volume/${trackingId.trim()}`);
+    }
+  };
+
   return (
     <div className="landing-page">
       {/* Hero Section */}
@@ -15,12 +27,19 @@ export default function LandingPage() {
               Aproveite a inteligência de dados disponível e coloque suas entregas em dia.
             </p>
             
-            <div className="hero-action-box">
+            <form onSubmit={handleSearch} className="hero-action-box">
               <h3>Consulte a situação da sua carga</h3>
-              <p>Digite o código de rastreio</p>
-              <input type="text" placeholder="CRG-0000" className="form-input" style={{ marginBottom: '1rem', background: '#fff' }} />
-              <button className="btn-primary" style={{ width: '100%' }}>Consultar Código</button>
-            </div>
+              <p>Digite o ID de rastreio</p>
+              <input 
+                type="text" 
+                placeholder="Ex: 1" 
+                value={trackingId}
+                onChange={(e) => setTrackingId(e.target.value)}
+                className="form-input" 
+                style={{ marginBottom: '1rem', background: '#fff' }} 
+              />
+              <button type="submit" className="btn-primary" style={{ width: '100%' }}>Consultar Código</button>
+            </form>
           </div>
 
           <div className="hero-image-wrapper">
